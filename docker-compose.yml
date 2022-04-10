@@ -1,0 +1,115 @@
+version: "3.8"
+
+services:
+  instagram:
+    container_name: instagram-container
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command:
+      - /start
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_POST=5432
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    volumes:
+      - .:/instagram
+      - static:/instagram/static
+      - media:/instagram/media
+    expose:
+      - 8000
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    container_name: postgres-container
+    restart: always
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+
+  pgadmin:
+    container_name: pgadmin-container
+    restart: always
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5051:80"
+    depends_on:
+      - postgres
+
+  redis:
+    container_name: redis-container
+    image: redis:5-alpine
+    expose:
+      - 6379
+
+  celery-worker:
+    container_name: celery-worker-container
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-celeryworker
+    volumes:
+      - .:/instagram
+    depends_on:
+      - redis
+      - postgres
+
+  celery-beat:
+    container_name: celery-beat-container
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-celerybeat
+    volumes:
+      - .:/instagram
+    depends_on:
+      - redis
+      - postgres
+
+  celery-flower:
+    container_name: celery-flower-container
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+    command: /start-flower
+    ports:
+      - "5557:5555"
+    volumes:
+      - .:/instagram
+    depends_on:
+      - redis
+      - postgres
+
+
+  nginx:
+    container_name: nginx-container
+    restart: always
+    build:
+      context: ./docker/local/nginx
+      dockerfile: Dockerfile
+    volumes:
+      - static:/instagram/static
+      - media:/instagram/media
+    ports:
+      - "8000:80"
+    depends_on:
+      - instagram
+
+volumes:
+  static:
+  media:
+  postgres_data:

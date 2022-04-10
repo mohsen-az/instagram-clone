@@ -1,0 +1,19 @@
+-------------------------------------------------------
+Celery:
+-------------------------------------------------------
+celery -A proj worker -l info
+
+celery -A proj worker --concurrency 2 -l info
+
+celery -A proj worker --soft-time-limit 2 -l info  => Soft Time Limit
+
+celery -A proj worker --time-limit 2 -l info  => Hard Time Limit
+
+celery -A proj worker -l INFO -Q queue_name
+
+celery -A proj beat -l info
+-------------------------------------------------------
+Coverage:
+-------------------------------------------------------
+coverage run --source="." manage.py test
+coverage html

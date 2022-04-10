@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock title %}
+
+
+{% block content %}
+
+    <h1>Home Page</h1>
+    <h3>Hi, {{ request.user.username }}</h3>
+
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Invitations{% endblock title %}
+
+
+{% block content %}
+
+    <h3>username: {{ object.username }}</h3>
+
+    <hr>
+
+    {% for invitation in invitations %}
+        <div>
+            {{ invitation.following.username }} | <a href="{% url 'profile' invitation.following.username %}">See Profile</a>
+
+            <form action="{% url 'relation:accept-invitation' invitation.following.username %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Accept Invitation</button>
+            </form>
+
+            <form action="{% url 'relation:reject-invitation' invitation.following.username %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Reject Invitation</button>
+            </form>
+
+        </div>
+    {% endfor %}
+
+{% endblock content %}

@@ -1,0 +1,25 @@
+# Django stuff:
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/*
+.idea/*
+__pycache__/
+.pytest_cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+.coverage
+.coveragerc
+.dockerignore
+celerybeat-schedule

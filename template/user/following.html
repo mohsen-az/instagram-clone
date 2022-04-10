@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Following{% endblock title %}
+
+
+{% block content %}
+
+    <h3>username: {{ object.username }}</h3>
+    <p>following: {{ followings.count }}</p>
+
+    <hr>
+
+    {% for following in followings %}
+        <p>Following: {{ following.follower.username }}</p>
+    {% endfor %}
+
+{% endblock content %}

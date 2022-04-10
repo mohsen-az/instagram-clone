@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock title %}
+
+
+{% block content %}
+
+    <h3>username: {{ object.username }}</h3>
+    <img src="{{ object.avatar.url }}" width="150px">
+    {% if object == request.user %}
+        <p><a href="{% url 'invitation' object.username %}">invitations</a></p>
+    {% endif %}
+    <p>bio: {{ object.bio }}</p>
+    <p>privacy: {{ object.get_privacy_display }}</p>
+    <p>website: <a href="{{ request.user.website }}">{{ object.website }}</a></p>
+
+    <p>posts: {{ posts_count }}</p>
+    <p>following: {{ followings_count }} [<a href="{% url 'following' object.username %}">Link</a>]</p>
+    <p>followers: {{ followers_count }} [<a href="{% url 'follower' object.username %}">Link</a>]</p>
+
+    {% if object != request.user %}
+        {% if is_following is False and is_send is False %}
+            <form action="{% url 'relation:follow' object.username %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Follow</button>
+            </form>
+        {% endif %}
+
+        {% if is_following is False and is_send is True %}
+            <button type="submit" disabled>Waiting...</button>
+        {% endif %}
+
+        {% if is_following is True and is_send is False %}
+            <form action="{% url 'relation:unfollow' object.username %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Unfollow</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+{% endblock content %}
