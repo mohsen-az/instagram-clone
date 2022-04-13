@@ -6,7 +6,7 @@ from kombu import Exchange, Queue
 SECRET_KEY = 'django-insecure-%+=nxz1jr)6mnu@5ma4nyn$ej-i%=asgs+zv$yu4_#b8-@91o1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 

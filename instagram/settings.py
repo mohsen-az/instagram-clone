@@ -43,9 +43,11 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "django_filters",
     "rest_framework_simplejwt",
+
+    "grappelli",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LOCALS_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCALS_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,7 +83,7 @@ WSGI_APPLICATION = 'instagram.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': POSTGRES_DATABASE if DEBUG else POSTGRES_DATABASE_LOCAL
+    'default': POSTGRES_DATABASE_LOCAL if DEBUG else POSTGRES_DATABASE
 }
 
 # Password validation
